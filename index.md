@@ -1,9 +1,6 @@
 
----
-title: Welcome
----
-
 {% include navigation.html %}
+
 
 ## Welcome to the EDA Stats 2019 Bonus Pages!
 

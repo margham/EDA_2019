@@ -1,12 +1,8 @@
----
+
 {% include navigation.html %}
----
+
 
 ## Welcome to the EDA Stats 2019 Bonus Pages!
-
----
-{% include button.html url="http://www.google.com" %}
---- 
 
 You can use the [editor on GitHub](https://github.com/margham/EDA_2019/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
 

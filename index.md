@@ -10,7 +10,9 @@ This is where you can come for an extra introduction to R, see how to remake the
 
 ### What you'll find here: 
 
-- Check out the [Introduction to R](/before-you-start.html) page for tutorials to help you install and begin using R. 
+-A [step-by-step guide](/before-you-start.html){target="_blank"} to getting started with R. 
+
+- 
 
 - 
 

@@ -1,0 +1,16 @@
+.wrap {
+  float:right;
+}
+
+ul.nav {
+  margin:0;
+  width:600px;
+  height:60px;
+  list-style:none!important;
+ }
+
+ul.nav li{
+  display:inline;
+  color:red;
+}
+

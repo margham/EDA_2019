@@ -1,19 +1,20 @@
 
-{% include navigation.html %}
+---
+title: Welcome
+---
 
+{% include navigation.html %}
 
 ## Welcome to the EDA Stats 2019 Bonus Pages!
 
-You can use the [editor on GitHub](https://github.com/margham/EDA_2019/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
+This is where you'll find additional material to help you up your R game. 
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
+### 
 
 Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
 ```markdown
-Syntax highlighted code block
+
 
 # Header 1
 ## Header 2

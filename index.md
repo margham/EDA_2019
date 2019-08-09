@@ -1,3 +1,5 @@
+{% include navigation.html %}
+
 ## Welcome to the EDA Stats 2019 Bonus Pages!
 
 {% include button.html url="http://www.google.com" %}

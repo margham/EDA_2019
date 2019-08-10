@@ -1,7 +1,10 @@
+
 .navbar {
     float:left;
     background-color: #333;
     overflow: hidden;
+    width: 960px;
+    padding-bottom: 15%;
 }
 
 .navbar a {
@@ -13,7 +16,6 @@
   text-decoration: none;
   font-family: "Courier New", courier, monospace;
   font-size: 17px;
-  padding-bottom:20px;
 }
 
 .navbar a:hover {

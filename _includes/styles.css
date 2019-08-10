@@ -1,16 +1,15 @@
-.wrap {
+.navbar {
   float:right;
+  padding-right: 30px;
+  padding-top: 25px;
 }
 
 ul.nav {
-  display: inline-block;
-  vertical-align: middle;
+  display: block;
   float:right;
   /*width:600px;
   height:60px;*/
-  padding-right: 50px;
-  padding-top: 50px;
-  /*list-style:none!important;*/
+  list-style:none!important;
  }
 
 ul.nav li{

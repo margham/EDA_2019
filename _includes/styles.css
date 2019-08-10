@@ -4,12 +4,13 @@
     background-color: #000000;
     overflow: hidden;
     width: 790px;
+    margin-bottom: 50px;
 }
 
 .navbar a {
 /* Right-aligned section inside the top navigation */
   float: left;
-  color: #f2f2f2;
+  color: #FFF;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;

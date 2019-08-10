@@ -1,6 +1,6 @@
 .box{ 
   float:left;
-  height: 200px;
+  height: 100px;
   width: 675px;
   background-color: rgb(255,0,0);opacity:0.0;
 }

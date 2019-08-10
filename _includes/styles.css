@@ -8,7 +8,7 @@
 
 .navbar {
     float:left;
-    background-color: #000000;
+    background-color: #000000; opacity:0.9;
     overflow: hidden;
     width: 700px;
     margin-bottom: 50px;

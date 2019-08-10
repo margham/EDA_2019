@@ -3,10 +3,14 @@
 }
 
 ul.nav {
-  margin:0;
-  width:600px;
-  height:60px;
-  list-style:none!important;
+  display: inline-block;
+  vertical-align: middle;
+  float:right;
+  /*width:600px;
+  height:60px;*/
+  padding-right: 50px;
+  padding-top: 50px;
+  /*list-style:none!important;*/
  }
 
 ul.nav li{

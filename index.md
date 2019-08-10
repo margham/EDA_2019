@@ -10,7 +10,7 @@ This is where you can come for an extra introduction to R, see how to remake the
 
 ### What you'll find here: 
 
--A [step-by-step guide](/before-you-start.html){target="_blank"} to getting started with R. 
+- A [step-by-step guide](/before-you-start.html){:target="_blank"} to getting started with R. 
 
 - 
 

@@ -11,7 +11,9 @@
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
+  font-family: "Courier New", courier, monospace;
   font-size: 17px;
+  padding-bottom:20px;
 }
 
 .navbar a:hover {

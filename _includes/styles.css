@@ -1,16 +1,16 @@
 .box{ 
   float:left;
   height: 50px;
-  width: 650px;
+  width: 100%;
   background-color: rgb(255,0,0);opacity:0.0;
 }
 
 
 .topnav {
     float:left;
-    background-color: #000000; opacity:0.9;
+    background: linear-gradient(to top, #373737, #212121);
     overflow: hidden;
-    width: 650px;
+    width: 100%;
     -webkit-border-top-right-radius:4px;
     -webkit-border-bottom-right-radius:4px;
     -webkit-border-top-left-radius:4px;
@@ -32,8 +32,8 @@
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  font-family: "Courier New", courier, monospace;
-  font-size: 17px;
+  font-family: 'Lucida Grande', 'Calibri', Helvetica, Arial, sans-serif;
+  font-size: 20px;
 }
 
 .topnav a:hover {

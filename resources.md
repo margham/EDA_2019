@@ -1,6 +1,6 @@
 {% include navigation.html %}
 
-# Resources
+# RESOURCES
 
 My tutorials are very specific to the EDA course, so they aren't a great all-purpose resource. But there is a whole Internet full of really amazing people who've made tutorials and guides for 
 

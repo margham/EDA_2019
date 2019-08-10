@@ -6,7 +6,7 @@
 }
 
 
-.navbar {
+.topnav {
     float:left;
     background-color: #000000; opacity:0.9;
     overflow: hidden;
@@ -25,7 +25,7 @@
   border-top-left-radius:4px;
 }
 
-.navbar a {
+.topnav a {
 /* Right-aligned section inside the top navigation */
   float: left;
   color: #FFF;
@@ -36,13 +36,13 @@
   font-size: 17px;
 }
 
-.navbar a:hover {
+.topnav a:hover {
   background-color: #ddd;
   color: black;
 }
 
 
 /* Hide the link that should open and close the topnav on small screens */
-.navbar .icon {
+.topnav .icon {
   display: none;
 }

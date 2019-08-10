@@ -1,7 +1,7 @@
 .box{ 
   float:left;
   height: 200px;
-  width: 700px;
+  width: 675px;
   background-color: rgb(255,0,0);opacity:0.0;
 }
 
@@ -10,7 +10,7 @@
     float:left;
     background-color: #000000; opacity:0.9;
     overflow: hidden;
-    width: 700px;
+    width: 675px;
     margin-bottom: 50px;
 }
 

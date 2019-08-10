@@ -8,4 +8,4 @@ My tutorials are very specific to the EDA course, so they aren't a great all-pur
 
 - [R For Data Science](https://r4ds.had.co.nz/index.html){:target="_blank"}: A completely free and comprehensive introduction to data manipulation and communication using R and the Tidyverse (a language for working in R developed by the inimitable [Hadley Wickham](http://hadley.nz/){:target="_blank"}. Can get a bit tedious, but you'll probably find whatever technical help you need here.  
 
-- *Stack Overflow*: Not a tutorial per-se, but one of the greatest peer-to-peer resources available. Nearly every question you might have has been asked and answered ten different ways here!
+- **Stack Overflow**: Not a tutorial per-se, but one of the greatest peer-to-peer resources available. Nearly every question you might have has been asked and answered ten different ways here!

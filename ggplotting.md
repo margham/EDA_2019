@@ -1,6 +1,5 @@
-{% include navigation.html %}
 
-# GGPLOT-ing
+{% include navigation.html %}
 
 This is where I'll upload tutorials for remaking the daily lab assignments in GGPLOT!
 

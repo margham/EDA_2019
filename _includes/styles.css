@@ -6,12 +6,9 @@
 
 
 .topnav {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    background: linear-gradient(to top, #373737, #212121);
     overflow: hidden;
     width: 100%;
+    background: linear-gradient(to top, #373737, #212121);
     -webkit-border-top-right-radius:4px;
     -webkit-border-bottom-right-radius:4px;
     -webkit-border-top-left-radius:4px;
@@ -28,6 +25,9 @@
 
 .topnav a {
 /* Right-aligned section inside the top navigation */
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
   color: #FFF;
   text-align: center;
   padding: 14px 16px;

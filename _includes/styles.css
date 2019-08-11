@@ -41,4 +41,8 @@
   color: black;
 }
 
+/* Hide the link that should open and close the topnav on small screens */
+.topnav .icon {
+  display: none;
+}
 

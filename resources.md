@@ -1,5 +1,6 @@
 {% include navigation.html %}
 
+
 # RESOURCES
 
 My tutorials are very specific to the EDA course, so they aren't a great all-purpose resource. But there is a whole Internet full of tutorials and guides available completely free!

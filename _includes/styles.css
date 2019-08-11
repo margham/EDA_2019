@@ -8,6 +8,10 @@
 .topnav {
     overflow: hidden;
     width: 100%;
+    height:40px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
     background: linear-gradient(to top, #373737, #212121);
     -webkit-border-top-right-radius:4px;
     -webkit-border-bottom-right-radius:4px;

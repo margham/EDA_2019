@@ -9,7 +9,7 @@
     /*overflow: hidden;*/
     width: 100%;
     display: block;
-    margin: auto;
+    margin: 25px;
     background: linear-gradient(to top, #373737, #212121);
     -webkit-border-top-right-radius:4px;
     -webkit-border-bottom-right-radius:4px;

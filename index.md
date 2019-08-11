@@ -3,14 +3,9 @@
 
 ## Welcome to the EDA Stats 2019 Bonus Pages!
 
-This is where you can come for an extra introduction to R, see how to remake the labwork assignments using ggplot (and tidyverse!), and find links to other useful sites. 
+Here you'll find: 
+  - Extra help [getting started](/introduction.md) with R,
+  - Tutorials demonstrating how to remake the EDA labwork assignments using [ggplot](/GGPLOTTING.md) (and tidyverse!),
+  - Links to other [useful sites](/resources.md) and tutorials. 
 
-
-### What you'll find here: 
-
-- A [step-by-step guide](/before-you-start.html){:target="_blank"} to getting started with R. 
-
-- 
-
-- 
 

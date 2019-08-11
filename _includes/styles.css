@@ -1,5 +1,4 @@
 .box{ 
-  float:left;
   height: 50px;
   width: 100%;
   background-color: rgb(255,0,0);opacity:0.0;
@@ -27,7 +26,6 @@
 
 .topnav a {
 /* Right-aligned section inside the top navigation */
-  float: left;
   color: #FFF;
   text-align: center;
   padding: 14px 16px;

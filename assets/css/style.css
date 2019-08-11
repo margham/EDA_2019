@@ -3,7 +3,7 @@
 
 @import "{{ site.theme }}";
 
-.box{ 
+#box{ 
   float:left;
   height: 50px;
   width: 100%;
@@ -11,7 +11,7 @@
 }
 
 
-.topnav {
+#topnav {
     float:left;
     background: linear-gradient(to top, #373737, #212121);
     overflow: hidden;
@@ -30,7 +30,7 @@
   border-top-left-radius:4px;
 }
 
-.topnav a {
+#topnav a {
 /* Right-aligned section inside the top navigation */
   float: left;
   color: #FFF;
@@ -41,13 +41,14 @@
   font-size: 20px;
 }
 
-.topnav a:hover {
+#topnav a:hover {
   background-color: #ddd;
   color: black;
 }
 
 
 /* Hide the link that should open and close the topnav on small screens */
-.topnav .icon {
+
+#topnav .icon {
   display: none;
 }

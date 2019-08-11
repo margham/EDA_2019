@@ -42,7 +42,8 @@
 
 .topnav a:hover {
   background-color: #ddd;
-  color: black;
+  /*color: black;*/
+  background: linear-gradient(to top, #373737, #212121);
 }
 
 

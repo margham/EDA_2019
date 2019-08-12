@@ -61,7 +61,7 @@
 @media screen and (max-width: 600px) {
   .topnav.responsive {position: relative;}
   .topnav.responsive a.icon {
-    overflow: hidden;
+    /*overflow: hidden;*/
     position: absolute;
     right: 0;
     top: 0;

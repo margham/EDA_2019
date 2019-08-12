@@ -20,3 +20,5 @@ This is where I'll upload tutorials for remaking the daily lab assignments in GG
 ## Further Resources:
 
 *add links to tutorials here*
+
+{% include spacer.html %}

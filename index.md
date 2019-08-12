@@ -1,4 +1,4 @@
-{% include navbar.html %}
+{% include nav3.html %}
 
 
 ## Welcome to the EDA Stats 2019 Bonus Pages!

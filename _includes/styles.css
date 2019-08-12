@@ -9,8 +9,8 @@
     /*overflow: hidden;*/
     width: 100%;
     display: block;
-    padding-top: 10px;
-    padding-bottom:10px;
+    padding-top: 20px;
+    padding-bottom:20px;
     background: linear-gradient(to top, #373737, #212121);
     -webkit-border-top-right-radius:4px;
     -webkit-border-bottom-right-radius:4px;

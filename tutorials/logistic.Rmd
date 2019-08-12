@@ -1,0 +1,257 @@
+---
+title: "Log_Reg_Day4"
+author: "Becca"
+date: "5 oktober 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Part I. Habitat fragmentation and rodent distribution in southern California
+
+1a. First, read in datafile and packages
+```{r }
+library(boot)
+library(vegan)
+library(ggplot2)
+
+setwd("C:/Users/rbs335/Desktop/Stats/")
+bolger<-read.csv("bolger.csv")
+```
+
+1b. Next, view the data
+```{r }
+summary(bolger)
+#everything looks numeric, good. 
+head(bolger)
+
+```
+
+2. Check for collinearity among explanatory variables.
+```{r }
+cor(bolger[1:3])
+#strong neg reg between pershrub and age.
+#make a plot
+plot(PERSHRUB ~AGE, data=bolger, cex=1, pch=15)
+#strong correlation between AGE & PERSHRUB
+```
+
+3. For logistic regression, make sure your response variable is binary:
+```{r }
+table(bolger$RODENTSP)
+#looks good, only 0s and 1s.
+```
+4. Now, create a glm
+```{r }
+mod1<-glm(RODENTSP ~PERSHRUB + AGE + DISTX, data=bolger, family="binomial") 
+#binomial indicates that your response variable is 0 or 1
+```
+
+
+5a.Get the regression coefficients and confint:
+```{r }
+summary(mod1)
+#only PERSHRUB is significant, other two are not good fits.
+confint(mod1)
+#confint for AGE and DISTX include 0, likely that these parameters have no effect on response variable. 
+```
+
+5b. Plot the residuals of the model:
+```{r }
+old<-par(mfrow=c(2,2))
+plot(mod1)
+#19 looks like an outlier
+```
+
+6a. Fit other models that improve on the original model. 
+```{r }
+#Try removing non-significant terms:
+mod2<-update(mod1, .~. -DISTX)
+summary(mod2)
+#PERSHRUB is still the only significant term
+
+#Compare mod1 and mod2
+anova(mod2, mod1, test="Chisq")
+anova(mod1, mod2, test="Chisq")
+#not so much better. 
+AIC(mod2, mod1)
+AIC(mod1, mod2)
+
+#Remove the other non-significant term, AGE:
+mod3<-update(mod2, .~. -AGE)
+summary(mod3)
+
+#Compare mod3 with mod2 and mod1 using AIC and anova
+AIC(mod3, mod2, mod1)
+anova(mod3, mod2, test="Chisq")
+#They are not significantly different. The simpler model is fine.
+```
+6b. Compare mod3 with a null model assuming random distribution:
+```{r }
+nullmod<-update(mod3, .~. -PERSHRUB)
+summary(nullmod)
+#okay, so null mod is definitely not significant.
+
+#compare with mod3
+anova(nullmod, mod3, test="Chisq")
+AIC(nullmod, mod3)
+#Mod 3 does significantly better. 
+```
+
+6c. Do all of this with the 'step'function:
+```{r }
+step(mod1, direction="backward")
+#does all of the same steps as we did manually. 
+```
+6d. Compare the final model to one where the "outlier" is removed:
+```{r }
+outlier.check<-update(object = mod3, .~., data=bolger[-19, ])
+summary(outlier.check)
+#actually, it looks like it does worse now, the outlier was pulling our regression. 
+coef(outlier.check)
+confint(outlier.check)
+#compare with mod3
+coef(mod3)
+#without the outlier the correlation is less strong.
+```
+7.
+a) Interpret the coefficients: 
+"For every increase in % shrub cover, we increase the odds of finding native rodents by a factor of exp(0.07662), or 1.08, or 8%"
+
+b) Make a plot:
+```{r }
+plot(RODENTSP~PERSHRUB, data=bolger) 
+curve(inv.logit(-3.9 + 0.07662*x), add=TRUE, col="red")
+curve(inv.logit(-9.35 + 0.1718112*x), add=TRUE, col="black", lty=2)
+legend("right", lty=c(1,2), legend=c("Full dataset", "Outlier removed"), col=c("red","black"), bty="n")
+points(RODENTSP ~ PERSHRUB, data=bolger[-19,], pch=16)
+#This isn't working. Try a workaround?
+```
+
+```{r }
+#make the data for the curves:
+rm19df<-data.frame(bolger[-19,])
+rm19df$pts<-predict(outlier.check, newdata=rm19df, type="response")
+lines(RODENTSP~pts, rm19df, col="red")
+```
+
+Part II. Predict Invasiveness of Pinus species.
+
+Load in data and libraries:
+```{r }
+library(boot)
+pine<-read.csv("grottkop.csv", sep=",")
+summary(pine)
+head(pine)
+```
+
+Check for collinearity among explanatory variables:
+```{r }
+pairs(pine[4:8], lower.panel=panel.smooth)
+#seed mass has a strong skew,might need to be transformed
+cor(pine[4:8])
+#no correlations abov 0.6, we're probably fine to use any of these
+```
+
+Transforming seed_mass:
+```{r }
+hist(pine$seed_mass)
+pine$ln_sm<-log(pine$seed_mass)
+hist(pine$ln_sm)
+#okay, looks a bit better
+```
+Make a model predicting invasiveness based on all variables (we don't have to throw any out to start because they are not strongly correlated with one another):
+```{r }
+full.pine<-glm(invasiveness ~NAR +SLA + ln_sm + MGT, data=pine, family = "binomial")
+step(full.pine, direction="backward")
+#algorithm did not converge
+```
+Because we have too many parameters and not enough data points, let's start with simple model (null) and work forward, doing forward model selection:
+```{r }
+nullpine<-glm(invasiveness ~ 1, data=pine, family="binomial")
+p1<-glm(invasiveness ~NAR, data=pine, family="binomial")
+p2<-update(p1, . ~SLA)
+p3 <- update(p1, . ~ln_sm)
+p4<-update(p1, . ~MGT)
+AIC(p1, p2, p3, p4)
+```
+
+p2 and p3 have best AIC, so start w/ those:
+```{r }
+p23<-glm(invasiveness~SLA+ln_sm, data=pine, family = "binomial")
+summary(p23)
+#only marginally significant parameters, but model is still better than simpler models
+```
+
+Add MGT and/or NAR:
+```{r }
+p23MGT<-update(p23, .~. + MGT)
+p23NAR<-update(p23, .~. +NAR)
+#NAR causes issues with fitting probabilities. Leave it out.
+
+AIC(p23, p23MGT)
+#adding MGT significantly improves the model
+summary(p23MGT)
+```
+
+Test interaction terms:
+```{r }
+p23M.Inter<-update(p23MGT, .~ln_sm*SLA*MGT - ln_sm:SLA:MGT)
+summary(p23M.Inter)
+#AIC is much higher w/ interaction terms. Remove interactions
+```
+
+Remove some interaction terms:
+```{r }
+p23M.Inter2<-update(p23M.Inter, .~. -ln_sm:SLA)
+summary(p23M.Inter2)
+#AIC is lower. Remove another interaction
+p23M.Inter3<-update(p23M.Inter2, .~. -ln_sm:MGT)
+summary(p23M.Inter3)
+#AIC is still lower, but not as low as the non-interactive model.
+AIC(p23M.Inter3, p23MGT)
+#p23MGT is slightly better
+```
+
+Interpret this graph:
+```{r }
+exp(coef(p23MGT))
+```
+"For every unit increase in log(seed mass), we get a corresponding decrease in the odds of a species being invasive by 78%. For every unit increase in SLA, odds of species being invasive increases 5%. For every unit increase in MGT, odds of a species being invasive declines by 17%."
+
+Visualize the data:
+```{r }
+summary(pine[c("SLA", "ln_sm", "MGT")])
+coef(p23MGT)
+```
+
+Using curve() function:
+```{r }
+plot(invasiveness~ln_sm, data=pine) 
+curve(inv.logit(4.72 - 1.498*x + 0.0527*mean(pine$SLA) + -0.18657*mean(pine$MGT)), from=1, to=7, lwd=2, add=TRUE)
+curve(inv.logit(4.72 - 1.498*x + 0.0527*mean(pine$SLA) + -0.18657*min(pine$MGT)), lty=2, add=TRUE)
+curve(inv.logit(4.72 - 1.498*x + 0.0527*mean(pine$SLA) + -0.18657*max(pine$MGT)), lty=2, add=TRUE)
+```
+
+
+```{r }
+library(lattice)
+newdat<-expand.grid(ln_sm = seq(1,6, length.out=20), MGT=seq(3, 40, length.out=20), SLA=rep(82, 20))
+new_resp<-predict(p23MGT, newdata=newdat, type="response")
+wireframe(new_resp ~ newdat$ln_sm+newdat$MGT, drape=T, xlim=c(6,1), scales=list(arrows=FALSE))
+```
+
+
+This isn't working, keep working on it. 
+```{r }
+curve(inv.logit(coef(p23MGT)[1])+(coef(p23MGT)[2]*x) + (coef(p23MGT)[3]*mean(pine$SLA)) + (coef(p23MGT)[4]*mean(pine$MGT)), lwd=2, from=1, to=7, add=TRUE)
+
+curve(inv.logit(coef(p23MGT)[1])+(coef(p23MGT)[2]*x) + (coef(p23MGT)[3]*mean(pine$SLA)) + (coef(p23MGT)[4]*mean(pine$MGT)), from =1, to =7, lty=2, add=TRUE) 
+
+curve(inv.logit(-9.35 + 0.1718112*x), add=TRUE, col="black", lty=2)
+legend("right", lty=c(1,2), legend=c("Full dataset", "Outlier removed"), col=c("red","black"), bty="n")
+points(RODENTSP ~ PERSHRUB, data=bolger[-19,], pch=16)
+```
+

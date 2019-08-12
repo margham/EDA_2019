@@ -1,0 +1,36 @@
+---
+title: "ggplot2"
+author: "Becca"
+date: "10-8-2019"
+output:
+  html_document: default
+  pdf_document: default
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+A basic introduction to ggplot2. For more in-depth information, check out [Chapter 3](https://r4ds.had.co.nz/data-visualisation.html){:target="_blank"} of the R for Data Science book by Wickham and Grolemund. Also check out the ggplot2 [documentation](https://ggplot2.tidyverse.org/reference/){:target="_blank"} online.
+
+Load packages
+```{r echo=TRUE, message=F, warning=F, results='hide'}
+#install.packages("ggplot2")
+#install.packages("tidyverse")
+library(ggplot2)
+library(tidyverse)
+```
+
+Load data
+```{r echo=TRUE,  message=F, warning=F, results='hide'}
+data("iris")
+View(iris)
+```
+
+Make a scatterplot
+```{r }
+(plot1 <- ggplot(iris, aes(x=Petal.Length, y=Petal.Width))+
+                geom_point())
+```

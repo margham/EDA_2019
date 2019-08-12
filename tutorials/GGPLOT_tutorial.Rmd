@@ -1,0 +1,232 @@
+---
+title: "GGPLOT for Linear Regression"
+author: "Becca Bevans"
+date: "October 2017 (Updated 2018)"
+output:
+  html_document: default
+  pdf_document: default
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(message=FALSE, warning=FALSE)
+```
+
+This is a walkthrough designed to show you an alternative method for producing visual summaries of the models we have worked with so far in the EDA course. I will use the datasets you have already downloaded for the course.
+
+#PART I: Linear regression with a single explanatory variable
+
+We'll start with a simple linear regression with one explanatory variable.
+
+First, load the dataset and necessary packages.  We will use the Christensen data from the linear regression lab. 
+```{r }
+chr<-read.csv2("christensen.csv")
+summary(chr)
+```
+
+Oops, you can see I used the wrong read-in command. I will try the `read.csv()` command instead. 
+```{r }
+chr<-read.csv("christensen.csv")
+summary(chr)
+```
+
+Much better. I will also load a few packages I will use to make the graphics in this tutorial.
+
+First, use the function `install.packages("ggplot2", "viridis")` to install both of these packages at once. Then use `library(ggplot2)` and `library(viridis)` to load them into your workspace. Viridis is just a color package, it is not necessary for making the charts. 
+```{r echo=FALSE}
+library(ggplot2)
+library(viridis)
+```
+
+In the linear regression lab we created the linear model CWD.BASA ~ RIP.DENS. Let's remake that model:
+```{r }
+mod1<-lm(CWD.BASA ~ RIP.DENS, data=chr)
+summary(mod1)
+old<-par(mfrow=c(2,2))
+plot(mod1)
+```
+The variable RIP.DENS does have a significant effect on the response CWD.BASA. The residuals don't look great, but the linear regression lab talked about that. Next we will plot a regression line in ggplot.
+
+Start by making the basic plot, with no points or lines added. This is the object that we will add all of our graphics parameters to:
+```{r }
+mod.plot<-ggplot(chr, aes(x=RIP.DENS, y=CWD.BASA))
+mod.plot
+```
+
+Now we will add our data points and the regression line. For a simple lm this is really easy, we just use the geom_smooth() function and specify that we want it to use a linear function.
+```{r }
+mod.plot + 
+  geom_point()+
+  geom_smooth(method=lm, se=TRUE)
+```
+
+This is all you need for plotting a basic linear regression in ggplot. The grey area around the linear regression line is the 95% confidence interval. The `method=lm` and `se=TRUE` arguments in my `geom_smooth()` graphics parameter aren't strictly necessary in this case, because the default for this function will always be to make a linear model (`method=lm`) and to supply the confidence interval(`se=true`).  
+
+However, it's good to know these arguments in order to change the function you want to use to make your line, or you could set se to FALSE to remove the confidence interval from the smoothing function.
+
+####Graphics challenge:
+
+Look up the type of function you could plot instead of a linear model by typing the function (`geom_smooth`) into the 'help' tab in R studio, and scrolling down to method. What does a glm, gam, or loess curve look like? What do these curves represent?
+
+###Adding extra graphics parameters in ggplot
+
+Now, if we want to show some more information, we could specify what we want the dots to look like. For example, we might want to color them based on the CWD.DENS:
+```{r }
+mod.plot +
+  geom_point(aes(color=CWD.DENS)) +
+  geom_smooth(method=lm, se=TRUE)
+```
+
+You can see ggplot automatically supplies the colors and the legend when we ask it to color the graph. We can also set a different color scheme and remove the legend if we want to. I like using the viridis package for changing colors, but you can also use RColorBrewer or basic R palettes, it's completely up to you!
+```{r }
+mod.plot + 
+  geom_point(aes(color=CWD.DENS), show.legend = F) +
+  geom_smooth(method=lm, se=TRUE, color="Black") +
+  scale_color_viridis(option="magma") 
+```
+
+If you like this graph, you can save it as an object so you don't have to keep typing in all of the code every time. I am going to set the legend to 'T' and save this plot under the name 'mod.plot2':
+```{r }
+mod.plot2<-mod.plot + 
+  geom_point(aes(color=CWD.DENS), show.legend = T) +
+  geom_smooth(method=lm, se=TRUE, color="Black") +
+  scale_color_viridis(option="magma") 
+```
+
+Now we can just type the name of the graph ('mod.plot2') and add a title to it. We can also rename the x and y axes to make them easier to interpret. 
+
+####A note about the code in this chunk
+
+I decided to automatically save all of my updates to mod.plot2 to a new objet named mod.plot3. But when I run this code on its own it won't show me the output, because R is just saving all of the code to the object 'mod.plot3'. To see what the plot looks like, we have to run it, which in this case means typing in the name of the plot on a new line and hitting [Ctrl][Enter].
+
+```{r }
+mod.plot3<- mod.plot2 + 
+  labs(x="Riparian Density (#trees/km shoreline)",
+       y="Basal area (m^2/km shoreline)",
+       title="Basal Area of Coarse Woody Debris by Riparian Density",
+       caption="Data from Christensen et al.1996")
+
+mod.plot3
+```
+
+###Changing themes in ggplot 
+
+Sometimes it's nice to have a more minimal black-and-white style for journal articles. This is easy to do in ggplot; for example, this is the theme I used for my master's thesis. Here, I am just taking the r theme called theme_bw() and adding a bunch of my own parameters. You can play with this code, maybe take some parameters out to see how it changes the theme.
+```{r }
+apatheme=theme_bw()+
+  theme(panel.grid.major=element_blank(),
+        panel.grid.minor=element_blank(),
+        panel.border=element_blank(),
+        axis.line=element_line(),
+        text=element_text(family="Times"),
+        legend.title=element_blank())
+``` 
+
+Adding this to our plot, we get:
+```{r }
+mod.plot3 +
+  apatheme
+```
+
+You can see the theme doesn't affect the points or the lines we put in the plot, but it changes all of the other elements. To get rid of the colors from our points, I'll just leave the geom_point() element empty. Here I am just cutting and pasting from my above code chunks to include all of the elements in the graph that I want to use for the final product.
+```{r }
+mod.plot + 
+  geom_point() +
+  geom_smooth(method=lm, se=TRUE, color="Black") +
+  labs(x="Riparian Density (#trees/km shoreline)", 
+       y="Basal area (m^2/km shoreline)",      
+       title="Basal Area of Coarse Woody Debris by Riparian Density", 
+       caption="Data from Christensen et al.1996") +
+  apatheme
+```
+
+I like this theme because it keeps things simple while displaying all of the necesary informaiton. The color-coded graphs are fun, but often aren't very readable or practical for publishing in journals. 
+
+
+#Part II. Linear regression with multiple explanatory variables
+                  
+On day 3 we created linear models with multiple explanatory variables, including transformed data. This walkthrough will go through some of the methods for plotting multiple linear regressions in ggplot. 
+
+First, we will reload the dataset and the packages we will need. Notice I am also loading the "broom" package. If you don't have this you can install it with the code `install.packages("broom")`. It has a helpful function augment() which pulls the standard error and fitted estimates of the response variable out of our models.
+```{r }
+library(broom)
+dat<-read.delim("fiddat.csv", sep = ";")
+summary(dat)
+```
+
+The final model from the multiple linear regression assignment was redmodel3. Let's recode that model. I need to re-transform my variables; you may not need to if you saved the dataframe with the transformed variables in it. 
+```{r }
+dat$ln_FID<-log(dat$FID)
+dat$log_VD<-log10(dat$visitordensity)
+
+redmodel3<-lm(ln_FID ~ log_VD + size + herb_cover, data=dat)
+```
+
+Now we are going to try plotting the regression line representing the relationship between log_FID and the 3 explanatory variables. First, let's make the basic ggplot object:
+
+###Preparing the data for plotting in ggplot
+
+First I have to make a dataframe with the values of my covariates for making predictions on the length of the line. I specify the minimum and maximum values of my explanatory variables based on their actual ranges in the original data frame, and then use this new data to predict the values for my regression line:
+```{r }
+nd<-data.frame(log_VD=seq(min(dat$log_VD), max(dat$log_VD), length.out=40), 
+               herb_cover=seq(min(dat$herb_cover), max(dat$herb_cover), length.out=40),
+               size=seq(min(dat$size), max(dat$size), length.out=40))
+stats.redmodel3<-glance(redmodel3) #try running this command to see what it does
+pred.1<-augment(redmodel3, newdata=nd)
+```
+
+####A note about the augment() function:
+
+'Augment' is a function used in ggplot mapping. It gives you a dataframe with the predictions of the fitted values of the model (".fitted") and the standard error of the fit for each of those points, along with all of the values you need to create your own plots of the residuals. You will probably get a warning saying augment is deprecated; this means it is no longer being supported by R. Soon enough it will die out, but for now it still works.
+
+
+Now set the parameters for the upper and lower 95% confidence limits on the mean:
+```{r }
+tcrit<-qt(0.975, df=stats.redmodel3$df.residual)
+pred.1$lwr<-with(pred.1, .fitted - tcrit * .se.fit)
+pred.1$upr<-with(pred.1, .fitted + tcrit * .se.fit)
+```
+
+###Making the plot in ggplot
+
+Now we will plot the line using the transformed data:
+```{r }
+ggplot(dat, aes(x=log_VD)) +
+  geom_point(aes(y=ln_FID), size = 1.5) +
+  geom_line(aes(y= .fitted), data=pred.1, size = 2, color="blue") +
+  geom_ribbon(aes(ymin = lwr, ymax = upr), 
+              data = pred.1, alpha = 0.5)
+```                          
+
+So, this isn't the best-looking graph, but it does show us the predicted values of ln_FID from the model (lm(ln_FID ~ log_VD + herb_cover + size)).
+
+If we want to plot the back-transformed line, we'll need to back-transform our axis variables and the upper and lower bounds of the confidence interval as well. I do that here by simply adding the appropriate functions (`10^()`, `exp()`, and `exp()`) to back-transform the variables `log_VD`, `ln_FID`, and `.fitted`, respectively. I also added the `exp()` argument to the `ymin` and `ymax` variables in the  `geom_ribbon()` function.
+```{r }
+ggplot(dat, aes(x=10^(log_VD))) +
+  geom_point(aes(y=exp(ln_FID)), size = 1.5) +
+  geom_line(aes(y= exp(.fitted)), data=pred.1, size = 2, color="blue") +
+  geom_ribbon(aes(ymin = exp(lwr), ymax = exp(upr)), 
+              data = pred.1, alpha = 0.5)
+```
+
+Of course, if you wanted to clean this up you could make another dataframe with the back-transformed variables and the predicted regression line and make your plot from that, but I have chosen to just leave all of the functions in my ggplot code so you can see what is actually happening.  
+
+###Changing graphics parameters in ggplot
+
+You can play around with axis labels and colors just as in section 1.
+
+You can also change the values you want to plot on the x and y axes by choosing different variables from the data frame. Here I have changed the x axis to represent herb cover, one of the variables in the data frame. 
+```{r }
+ggplot(dat, aes(x=herb_cover)) +
+  geom_point(aes(y=FID)) +
+  geom_line(aes(y= exp(.fitted)), data=pred.1, size = 1, color="white") +
+  geom_ribbon(aes(ymin = exp(lwr), ymax = exp(upr)), 
+              data = pred.1, alpha = 0.5) +
+  labs(x="Herb Cover", 
+       y="is this FID? Or ln_FID? Choose which one it is",      
+       title="Chart Title") +
+  theme_bw()
+```
+
+Nice. 

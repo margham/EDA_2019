@@ -1,0 +1,77 @@
+---
+title: "logistic-appendix"
+author: "Becca"
+date: "5 oktober 2018"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+```
+
+#An appendix to logistic regression
+
+###Update: Yesterday, when using the Bolger data, you were able to compare the fit of one model fit to the original data frame and one with the outlier removed using base graphics. I am going to recreate that comparison here using ggplot.
+
+First, load the data. I will first load the original dataframe and then make an updated dataframe with the outlier removed.
+```{r }
+library(ggplot2)
+bolger <- read.csv("bolger.csv")
+summary(bolger)
+#Now I will make another dataset that is identical except that I have
+#taken out observation 19.
+bolger.updated <- bolger[-19,]
+summary(bolger.updated)
+```
+
+Next, re-create the best-fit model (using the original data):
+```{r }
+rodent.mod <- glm(formula = RODENTSP ~ PERSHRUB, data = bolger, family = "binomial")
+summary(rodent.mod)
+```
+
+Now, we should be able to follow our normal procedure of 1) plotting the data points and 2) adding the curves representing our model fit. Let's try. Again, I will use the original data so that we get all of the points on the plot.
+```{r }
+rodent.plot <- ggplot(bolger, aes(x = PERSHRUB, y = RODENTSP)) +
+                geom_point() +
+                theme_minimal()
+
+rodent.plot
+```
+
+Adding the glm for the rodent model should be easy because it uses only one predictor variable.
+```{r }
+rodent.plot + 
+ stat_smooth(method = "glm", se = FALSE, method.args = list(family="binomial"))
+
+```
+
+But how do we add a line from a different dataset? We should be able to do this by predicting the outcome variable based on the model using the `predict` function. Here we will use the dataset with the outlier removed. This means we will also need to update our rodent.mod to include the updated dataset rather than the original dataset.
+```{r }
+#first make the updated model
+rodent.mod.updated <- glm(formula = RODENTSP ~ PERSHRUB, data = bolger.updated,
+                          family = "binomial") 
+#next predict the response
+bolger.updated$response <- (predict(rodent.mod.updated, 
+                           newdata = bolger.updated, type = "response"))
+#make sure it was added to your bolger.updated dataframe
+summary(bolger.updated)
+```
+
+
+Now add the line represented the response variable to your rodent.plot object using geom_line().
+```{r }
+rodent.plot +
+  stat_smooth(method = "glm", se = FALSE, method.args = list(family="binomial")) +
+  geom_line(data = bolger.updated, aes(y=response), color = "red")
+```
+
+And that's the basic idea. 
+
+###NOTE:
+One thing you will notice right away about the new curve we made (the red one) is that it is much rougher than our stat_smooth() line. This is because when ggplot calculates our curve for us it pretends that the predictor variable has no gaps in observations, whereas when we made our own prediction line we only had 24 observations to work with. 
+
+So - if you want to make the curve smoother so it matches what you have in your base graphics curves, you'll have to make a new dataframe that simulates the actual spread of your data, specify `length.out =` as some big number, and then generate the predictions of your response variable using the `predict()` function. Then you can add that line to your plot rather than the one I made here.    

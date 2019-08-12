@@ -1,0 +1,122 @@
+---
+title: "Logistic regression with ggplot"
+author: "Becca"
+date: "4 oktober 2018"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+```
+
+##A quick logistic regression example in ggplot
+
+Using the Pinus example data (grottkop.csv) from the Day 4 assignment, we found a possible best-fit model `glm(formula = Invasiveness - ln_sm + SLA + MGT + ln_sm:MGT + SLA:MGT, family = "binomial", data = pine)`.
+
+Let's recreate that model. First I will load the dataset. I am going to transform the seed mass variable into ln_sm by log-transforming it, but if you already went through the assignment then you likely already have the transformed variable in your dataframe. 
+
+```{r }
+pine <- read.csv("grottkop.csv", header=TRUE)
+pine$ln_sm <- log(pine$seed_mass)
+```
+
+Use `summary` to check that your dataframe has the log-transformed variable.
+
+Now re-create the best-fit model:
+```{r }
+invasive.mod <- glm(formula = invasiveness ~ ln_sm + SLA + MGT, family = "binomial", data = pine)
+
+summary(invasive.mod)
+```
+
+With the summary of the model we can see the effect size and direction ("estimate" column) for each variable and set of interactions we specified in the model. We also get the null and residual deviance, and the AIC value, which we can use to compare this model fit to other models fit to the same data. 
+
+Now, I want to plot a logistic regression onto my binomial data (invasiveness is a yes/no variable) using ggplot. This is fairly straightforward.
+
+Remember when we added a linear regression to a plot, we used the command `stat_smooth(method = "lm", se = TRUE)`, which told R to add a line to our plot representing the linear regression between our two variables. If we were only using two variables in this model the plotting would be equally easy. Just make your plot of the data points:
+
+```{r }
+library(ggplot2)
+
+basic.plot <- ggplot(pine, aes(x = ln_sm, y = invasiveness)) + 
+  geom_point() +
+  theme_bw()
+
+basic.plot
+```
+
+And then add the logistic regression line using the stat_smooth line:
+```{r }
+basic.plot +
+  stat_smooth(method = "glm", method.args = list(family="binomial"))
+
+#you can get rid of the standard-error lines using se=FALSE:
+basic.plot +
+  stat_smooth(method = "glm", method.args = list(family="binomial"), se=FALSE)
+```
+
+But our actual model has several explanatory variables, which are not represented at all in this graph. To make a curve that represents the data, we will need to generate some predictions of invasiveness based on our best-fit model, and then plot the predicted data.
+
+First, generate your predictions (base your range of values for your simulated on the actual spread of your real data):
+```{r }
+#make the dataframe
+newdat = data.frame(ln_sm = seq(1,6, length.out=25),
+                    MGT = seq(3,40, length.out = 25),
+                    SLA=rep(82, length.out = 25))
+#predict your response variable using your best-fit model
+newdat$response <- predict(invasive.mod, newdata = newdat, type = "response")
+summary(newdat)
+#the response variable is the one we want to use for our Y-axis now, as it contains all of the information on the effect of the model paraemeters on invasiveness. 
+```
+
+Now that we have our new data, we can use it to plot the line of our actual response variable. This time we will use geom_line, which allows us to specify the data we want to add (rather than calculating our regression for us based on the x and y axes on the graph). 
+```{r }
+basic.plot +
+  geom_line(aes(y = response), data = newdat) 
+``` 
+
+It should be fairly easy to make new lines for different levels of your response variable depending on different levels of your explanatory variables. Just add a new column to your data frame holding the level of one of your explanatory variables constant and generate a new prediction.
+
+I will now try to generate new lines based on the min, mean, and max values of the MGT and SLA variables, just as we do in the practical assignment. 
+
+###NOTE: Sometimes I struggle with R:
+I am going to specify the min, mean, and max of the MGT and SLA variables here because it's not working when I try to pull them directly out of the data frame. You should be able to specify these variables within your data.frame( ) command, but it's just not working out for me today.
+```
+#min(pine$MGT) #3
+#mean(pine$MGT) #16.6
+#max(pine$MGT) #40
+#min(pine$SLA) #40
+#mean(pine$SLA) #82.784
+#max(pine$SLA) #132.3
+```
+
+###All right, back to the business of making multiple curves:
+```{r }
+newdat2 <- data.frame( 
+            ln_sm = seq(min(pine$ln_sm), max(pine$ln_sm), length.out = 60),
+            MGT = rep(c(3, 16.6, 40), length.out = 60), 
+            SLA = rep(c(40, 82.784, 132.3), length.out = 60))
+
+#use the model to predict the values of invasiveness (your response variable) 
+#based on the new dataframe:
+newdat2$predicted.invasiveness<-predict(invasive.mod, 
+                                newdata = newdat2, type = "response")
+summary(newdat2)
+
+#Now re-make the basic plot and add the predicted line to it
+basic.plot + 
+ geom_line(data = newdat2, aes(y=predicted.invasiveness, group = as.factor(MGT),
+                               linetype = as.factor(MGT)))
+```
+
+
+And that's it for the basic ggplot-ing of logistic regression!
+
+###A few things to try:
+  a) Change the grouping and linetype to as.factor(SLA) to see how that changes the curves.
+  b) Try increasing and decreasing the length.out number in the data.frame() command to see how it makes the curves smoother or rougher. 
+  c) Try changing the line color based on the grouping factor (either MGT or SLA).
+  d) use labs(xlab = "", ylab = "", title = "") to add labels to the graph.

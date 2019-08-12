@@ -59,13 +59,14 @@
 @media screen and (max-width: 600px) {
   .topnav.responsive {position: relative;}
   .topnav.responsive a.icon {
-    position: absolute;
+    /*position: absolute;
     right: 0;
-    top: 0;
+    top: 0;*/
+    float: right;
   }
   
   .topnav.responsive a {
-    float: none;
+    float: right;
     display: block;
     text-align: left;
   }

@@ -9,8 +9,8 @@
     overflow: hidden;
     width: 100%;
     display: block;
-    padding-top: 10px;
-    padding-bottom:10px;
+    /*padding-top: 10px;
+    padding-bottom:10px;*/
     background: linear-gradient(to top, #373737, #212121);
     -webkit-border-top-right-radius:4px;
     -webkit-border-bottom-right-radius:4px;
@@ -32,7 +32,7 @@
   float: left;
   display: block;
   text-align: center;
-  padding: 14px 10px;
+  padding: 18px 18px;
   text-decoration: none;
   font-family: 'Lucida Grande', 'Calibri', Helvetica, Arial, sans-serif;
   font-size: 20px;

@@ -8,7 +8,7 @@
 .topnav {
     overflow: hidden;
     width: 100%;
-    display: block;
+    /*display: block;*/
     /*padding-top: 10px;
     padding-bottom:10px;*/
     background: linear-gradient(to top, #373737, #212121);

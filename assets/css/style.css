@@ -2,11 +2,7 @@
 ---
 
 @import "{{ site.theme }}";
-.inner2 {
-  position: relative;
-  max-width: 750px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 10px 10px;
-}
 
+.inner{
+  max-width: 720px;
+}

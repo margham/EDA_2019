@@ -1,9 +1,7 @@
-
 ---
 ---
 
 @import "{{ site.theme }}";
-
 
 .inner2 {
   position: relative;

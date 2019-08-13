@@ -2,3 +2,11 @@
 ---
 
 @import "{{ site.theme }}";
+
+
+.inner2 {
+  position: relative;
+  max-width: 850px;
+  padding: 20px 10px;
+  margin: 0 auto;
+}

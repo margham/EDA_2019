@@ -8,7 +8,9 @@
 .inner2 {
   position: relative;
   max-width: 725px;
-  padding: 20px 10px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px 10px;
   margin: 0 auto;
 }
 
